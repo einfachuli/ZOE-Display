@@ -11,7 +11,7 @@ Anleitung von Erich (eokgnah)
 1. Holt euch die Arduino-IDE: 
 https://www.arduino.cc/en/Main/Software
 
-2. Macht die IDE bereit für den ESP32: 
+2. Macht die IDE bereit für den ESP32: (VERSION 1.0.2 verwenden für SOFTWARE ab 2.112, sonst 1.0.1)
 https://randomnerdtutorials.com/installing-the-esp32-board-in-arduino-ide-windows-instructions/
 
 3. Kontrolliert die Einstellungen und installiert auf Eurem neuen ESP32 zum Initialisieren den „bare minimum“-Sketch aus den Beispielen (COM-Port kann bei Euch ggf. ein anderer sein).
