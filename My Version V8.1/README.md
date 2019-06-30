@@ -27,8 +27,8 @@ von einfachuli (ZOE-Aachen)
 
 - ich verwende Sockelleisten um den ESP und ggf auch das GPS zu sockeln. Sockelleisten sind dabei nur 5,7 mm hoch.
 
-- resistive Display wird direkt auf die Pinabstandsleiste des Displays gelötet und sitzt damit 1,6 mm tiefer im Einleger. 
-      Dazu mussen die Lötstellen auf der Platine sauber geschnitten werden.
+- kapazitive Display wird direkt auf die Pinabstandsleiste des Displays gelötet und sitzt damit 1,6 mm tiefer im Einleger. 
+   --> Dazu mussen die Lötstellen auf der Platine sauber geschnitten werden.
 
 - ggf. Reset- bzw. Ein-Aus-Schalter, als Unterbrecher vor der 12V+ Klemme.
 
