@@ -1,21 +1,18 @@
 # Platine und kap. Einleger V8.1
 
 
-
 von einfachuli (ZOE-Aachen)
-
 
 
 <pre>
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
 !!!! OHNE GEWÄHR, ALLES AUF EIGENE GEFAHR, NUR ZU TESTZWECKEN !!!!
-
+!!!! Das Projekt ist für Messe- und Laborzwecke bestimmt      !!!!
+!!!!!und für die Verwendung im Bereich der StVO nicht zugelassen!!
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 </pre>
-
 
 
 ##  Versionshinweise V8.1
