@@ -1,0 +1,230 @@
+v2.112 22.06.2019
+	WLAN an/aus nochmals überarbeitet.
+
+v2.111 22.06.2019
+	Wechel der CAN Bibliothek von V0.1.1 zu V0.3.1
+
+v2.110 21.06.2019 DEVEL
+	Watchdog schlägt immer an, wenn keine WLAN Verbindung hergestellt werden kann. Also nicht nur im 
+	"Fehlerfall", sondern auch, wenn z.B. zu einer SSID ein falsches Passwort angegeben wird.
+	Watchdog erstmal wieder deaktiviert.
+	Die WLAN Routinen wurden von Espressiv überarbeitet, aber leider ist diese Version 1.0.3 noch nicht freigegeben.
+	https://github.com/espressif/arduino-esp32/issues/2769
+	Es sieht so aus, als hätten wir nach einem Hardware Reset exakt dieses Problem:
+	https://github.com/espressif/arduino-esp32/issues/2823
+	Zur Behebung ist ein weiterer Reset notwendig.
+	
+v2.109 21.06.2019 DEVEL
+	Watchdog wieder aktiviert, wird beim Download einer neuen Version deaktiviert.
+
+v2.108 21.06.2019 DEVEL
+    esp_wifi_disconnect() in Setup und WLANreset wieder entfernt
+	WiFi.setAutoConnect(1) in ResetWLAN und Setup hinzugefügt, hilft nichts
+
+v2.107 21.06.2019 DEVEL
+    esp_wifi_disconnect() in Setup und WLANreset
+
+v2.106 21.06.2019 DEVEL
+	Im Nicht-Connect-Fall feuert jetzt der Watchdog.
+	Und er feuert auch beim Update :)
+	Testweise nochmal Watchdog raus.
+
+v2.105 21.06.2019 DEVEL
+	Test auf "Scan running" in runWifiMulti(), dann kein neuer Verbindungsversuch
+	DNS Server und MDNS wieder aktiviert, persistent wieder raus
+	
+v2.103 - 2.104 21.06.2019 DEVEL
+	WLAN Debugging.
+	Watchdog wurde von Espressif auf "Default: Aus" geändert, Watchdog wieder aktiviert (enableLoopWDT())
+	DNS Server testweise deaktiviert, MDNS Responder deaktiviert, Persistent = false
+
+v2.097 - 2.102 20.06.2019 DEVEL
+	Erster Versuch mit Espressif V1.0.2, scheint ohne Reflash des Minimal Sketch zu laufen
+	AP jetzt auch über Webserver Ein/Ausschaltbar
+
+v2.094 - 2.096 10.06.2019 DEVEL
+	CAN Empfangsroutine nochmals überarbeitet
+
+v2.093 10.06.2019 DEVEL
+	WLAN An/Aus wird jetzt gespeichert, wenn der Screen mit dem OK Button verlassen wird. WLAN kann jetzt also 
+	auch wieder eingeschaltet werden. Den RESET Button bei WLAN=Aus habe ich erstmal stehen lassen, das ist die 
+	einzige Möglichkeit für einen Soft-Reset. Die bisherige Funktion (WLAN temporär aus und dann RESET) ist nach 
+	wie vor gegeben, solange der Screen nicht mit OK verlassen wird.
+	Automatische Auswahl Bildschirmtyp geändert: Kapazitiv wird nur gesetzt, wenn auf dem i2c Bus EXAKT EIN 
+	GERÃ„T mit der ID 0x38 gefunden wird
+	Die CAN Bus Empfangsroutine prüft jetzt zuerst, ob die empfangene ID bekannt ist und erwartet wird. Falls nicht,
+	wird das Paket verworfen. Damit sollte das gelegentliche "Verhaspeln" deutlich besser werden.
+	Fehler beim Speichern ins NVS gefunden und beseitigt.
+	Die Update-Funktion speichert jetzt die Update-Datei nicht mehr als "update.old", sondern als 
+	"update.old.[Versionsnummer]". Eine Rückkehr zu einer alten Version ist jetzt also möglich, indem die 
+	gewünschte Datei nach "update.bin" umbenannt sowie die Datei ZOE gelöscht wird (in ZOE steht die GröÃŸe 
+	der Update-Datei, wenn eine alte Version genommen wird, dann wird die alte GröÃŸe nicht mehr stimmen. Das Löschen
+	der Datei disabledd den GröÃŸen-Check. Man kann auch alternativ die GröÃŸe der Datei in Bytes eintragen, dann findet
+	der Check wieder statt). 
+
+v2.092 02.06.2019 RELEASE
+	WLAN überarbeitet. Es läuft jetzt besser, immer unter der Voraussetzung, daÃŸ der AP aus ist.
+	
+v2.091 02.06.2019 DEVEL
+	kleine Korrekturen an den Ã„nderungen
+
+v2.090 01.06.2019 DEVEL
+	AP abschaltbar, Einstellung wird gespeichert
+	NTP abschaltbar, Einstellung wird gespeichert
+	Die Werte-Screens erscheinen nun beim Wischen oder Touchen "im Kreis". Nach dem letzten Screen folgt der Erste und umgekehrt
+
+v2.089 10.04.2019 DEVEL
+	Temporäres WLAN Deaktivieren eingebaut, so dass der AP nicht mehr von den Connect-Versuchen gestört wird.
+	WLAN = Aus wird nicht gespeichert, nach einem temp. Deaktivieren ist ein Reset notwendig.
+	NTP ist jetzt im Internet-Setup-Screen abschaltbar. Einstellung muss noch im EEPROM gespeichert werden.
+	
+v2.088 09.04.2019 DEVEL
+	Erste Versuche mit der V8 Platine von Michi
+	kleine Ausschalt-Animation eingefügt
+
+v2.087 23.03.2019 RELEASE
+	Resistiver Screen: die Kalibrierung wird nun nicht mehr überschrieben (insbesondere der letzte
+	Wert für die Drehung/Spiegelung)
+
+v2.086 23.03.2019 RELEASE
+	Debug-Output für den I2C Bus Scan hinzugefügt
+
+v2.085 09.03.2019 RELEASE
+	Wlan angepasst, geht hoffentlich besser. Eigentliches Problem aber noch nicht gelöst. Das Ding macht nen
+	AP auf, auch wenn ich die entsprechende Routine abschalte. Direkt nach dem Power On funktioniert es perfekt,
+	nach einem Reset nicht mehr, da scheint dann WiFiMulti funktionslos zu sein, und die Suche nach WLANs 
+	ebenfalls. Vermutung: Eine Kombination aus Speicherung der WLAN Daten im NVS (durch das Framework, nicht
+	durch mich), eigenleben der WLAN Routinen und der Tatsache, daÃŸ ein AP einen festen Kanal braucht, das 
+	scanNetworks() aber eben nicht, das soll ja alle Kanäle scannen.
+
+v2.084 06.03.2019 DEVEL
+	WLAN Debugging
+
+v2.083 01.03.2019 DEVEL
+	Touch Screen Debugging, Fehler gefunden.
+
+v2.082 01.03.2019 DEVEL
+	Touch Screen Debugging
+
+v2.081 23.02.2019 DEVEL
+	Wischgesten eingeführt: Vor/Zurückblättern der Screens mit Wischen möglich
+
+v2.080 17.02.2019 DEVEL
+	Neue Felder:
+	"Entfernung zum Ziel"  aktuelle Entfernung zum Ziel, zählt während der Fahrt runter
+    "Anfangsentf. z.Ziel"  enthält die anfangs eingegebene Entfernung zum Ziel
+    "Reichw. Fahrtbeginn"  Reichweite bei Fahrtbeginn
+    "Reichw. Fahrt Diff."  Reichweitendifferenz zwischen ZOE und den aktuellen Gegebenheiten
+    "Restreichw. am Ziel"  Vorhersage der Restreichweite am Ziel (Basis: Strecke < 1km -> Mittelwert der ZOE, ansonsten Mittelwert Fahrt)
+	
+	Demnächst steht eine Ã„nderung in den gespeicherten Settings an. Um das einigermassen vernünftig über die Bühne
+	zu bringen wurde eine Versionsnummer für die Settings eingeführt. Diese Versionsnummer wird mit den allgemeinen
+	Settings (Speichern und lesen NVS/ SD-Card) gespeichert, daher wird beim ersten Booten die Prüfsumme nicht stimmen. Bei
+	Problemen mit der Speicherung bitte einmal die Einstellungen vornehmen (Lesen/Schreiben SD/NVS) und "Live -> NVS" 
+	sowie "Live->SD" drücken.
+
+v2.079 16.02.2019 DEVEL
+	Werte im Drive Screen konfigurierbar
+
+	Touch-Flächen der Bedienelemente (OK, Abbruch, etc) vergroessert, bitte Bescheid sagen, falls es noch irgendwo hakelt
+
+	Neuer Feldtyp: Eingabefeld. Optisch gekennzeichnet durch grauen Hintergrund der Feldbeschreibung.
+	Eingabe eines Wertes durch langes drücken. Derzeitige Eingabefelder: Entfernung zum Ziel, GPS Home Koordinaten.
+
+v2.078 09.02.2019 DEVEL
+	Ladezeit korrigiert: der "normale" Wert kann nur max. 17 Stunden anzeigen, es gibt aber einen zweiten Wert,
+	der bis 32 Stunden geht (solche Zeiten können beim 40kWh Akku und einphasigem Laden vorkommen).
+	Neues Feld: Ladeanschluss. Die Angabe der ZOE ist fehlerhaft. Altes Feld "Ladeanschluss" umbenannt nach
+	"Ladeanschluss ZOE", neues Feld Ladeanschluss (in der Liste ganz unten) eingeführt. Unterscheidnung nach Typ:
+	0 = Not Available (kein Ladevorgang)
+	1 = 10A 1phasig
+	2 = 14A 1phasig
+	3 = 16A 3phasig
+	4 = 32A 3phasig
+	5 = 63A 3phasig
+	6 = Unbekannt, bitte Bescheid sagen wenn das erscheint (Hilfreich sind die Werte "DCDC Load" und "ausgehand.Ladestrom")
+
+v2.077 06.02.2019 RELEASE
+	Power Off eingebaut: Setup-Screen "Power", Verzögerung einstellbar, Pin GPIO12 wird HIGH wenn ausgeschaltet werden soll
+	Error/Warning Setup Screen eingebaut. Die Error/Warning Auswertung lässt sich derzeit nur auf der DEVEL-Version einschalten.
+	About-Screen: Button verschoben in linke obere Ecke (A)
+
+v2.076 03.02.2019 DEVEL
+	Im Bereich Error/Warning einige Korrekturen vorgenommen (Test steht aus)
+	Ãœber den Webserver / SD-Card ist jetzt das CHANGELOG und die LICENSE Datei ladbar und anschaubar.
+	Anmerkung: Die Error/Warning Meldungen sollten nur auf der DEVEL Version erscheinen. Falls doch
+	welche angezeigt werden: Bitte ignorieren, Work in Progress, das Auto ist OK, nur die Software
+	noch nicht.
+
+v2.075 02.02.2019 RELEASE
+	Dieses Image ist das erste, welches mit dem Espressif Framework 1.0.1 kompiliert wurde.
+	Die Farben, die für die Buttons (und Ladegraph/Fahrgraph) verwendet werden, sind jetzt einstellbar (Screens -> Farben)
+	Die Einstellungen dazu werden im NVS/auf der SD Karte gespeichert.
+
+v2.073 26.01.2019 DEVEL
+	Weitere Warnungen/Fehlermeldungen eingebaut
+
+v2.072 22.01.2019 RELEASE
+	DEVEL Download Channel eingebaut
+	DEBUG jetzt default auf 0
+
+v2.071 13.01.2019 RELEASE (alles ab hier ist RELEASE)
+	ZOE: Bei Fahrbeginn wird nicht automatisch auf den Drive Screen umgeschltet, auch wenn dies so 
+	eingestellt ist. Kleine Ã„nderung an der Logik, sollte jetzt funktionieren
+	Weitere Warnungen / Fehlermeldungen implementiert
+	SMART: Keine Ã„nderung
+
+v2.070 07.01.2019
+	Wert für ClimAvailablePower (ZOE) gefixed.
+
+v2.069 04.01.2019
+	Erste Version mit rudimentären Meldungen bei Fehlern und Warnungen des Autos.
+	vorerst nur folgendes implementiert (falls es funktioniert):
+	- CAN Bus liefert keine Daten (Smart und ZOE, wird nicht gemeldet wenn DEBUG: Develop gesetzt ist)
+	- Zündung an und Fahrertür offen (ZOE)
+	- Zündung an und Beifahrertür offen (ZOE)	
+
+v2.068 03.01.2019
+	Fahrgraph hat jetzt eine zweite Darstellungsweise (Linien oder Flächen), Umschalten durch Touch auf den Graph
+	Die im Fahrgraph angezeigte Strecke kann eingestellt werden (2,4,10,20,40,100 km). 
+	Entsprechend wird alle 10,20,50,100,200,500 Meter ein Satz Werte gespeichert.
+	Der Puffer wird bei Umstellung der Skala nicht gelöscht, es können also nach dem Einstellen Werte
+	mit unterschiedlicher Auflösung angezeigt werden.
+	
+v2.067 02.01.2019
+	NTP wurde fälschlicherweise nicht initialisiert (fixed).
+	Fahrgraph überarbeitet
+
+v2.066 16.12.2018
+	Ohne weitere Angaben wurde für den MQTT Server der Port 0 angenommen. Zu Port 1883 geändert.
+
+v2.065 16.12.2018
+	Port des MQTT Servers ist jetzt übers Webserver Setup konfigurierbar.
+	Die bisherige Ladedauer im Charge Screen wird jetzt ohne Sekunden dargestellt.
+
+v2.064 08.12.2018
+	GPIO12 ist nicht nutzbar (beim booten steht da HIGH Pegel an, das versetzt den ESP32 in
+	einen Bootloop). Das PWM Signal steht nun auf GPIO33 an, CANBUS2_RX wurde auf GPI35 verschoben.
+	Zusammen mit der einglöteten Brücke auf #5 (kapazitives Display) funktioniert jetzt die 
+	Helligkeitsregelung.
+	Die Helligkeit wird jetzt auch gespeichert. Da bei Helligkeit==0 nichts mehr zu sehen
+	ist, wird ein gespeicherter Wert 0 beim Booten auf 10 gesetzt
+	Die PWM Helligkeitsregelung ist nur aktiv (und auch im Setup nur sichtbar), wenn der PWM Pin 
+	GPIO33 beim Booten auf HIGH steht. Das ist der Fall, wenn der Pin angeschlossen und auf dem Display
+	die Brücke #5 gesetzt wurde.
+
+v2.063 07.12.2018
+	An GPIO12 steht jetzt ein PWM Signal an, welches zur Steuerung der Bildschirmhelligkeit
+	verwendet werden kann. Einstellbar im "Screens" Setup Bildschirm.
+	Erstmal zum Test, der eingestellte Wert wird (noch) nicht gespeichert und steht nach dem 
+	Booten immer auf 100%
+
+v2.062 06.12.2018
+	Bei gedrehtem Bildschirm funktioniert jetzt auch der resistive Touch Screen.
+
+v2.061 04.12.2018
+	GPIO36 (eigentlich GPI36) bestimmt die Drehung des Bildschirms. 
+	Der Pin wird beim booten abgefragt und bestimmt die Bildschirmausrichtung.
+	ist GPIO36 auf 0, ist der Bildschirm normal (bei mir liest er 0 wenn der Pin offen ist)
+	ist GPIO36 auf 1 (mit 10k Widerstand auf 3V3 gelegt), wird der Bildschirm um 180 Grad gedreht
+	Getestet mit kapazitivem Display, resistiv ist implementiert, aber nicht getestet.
